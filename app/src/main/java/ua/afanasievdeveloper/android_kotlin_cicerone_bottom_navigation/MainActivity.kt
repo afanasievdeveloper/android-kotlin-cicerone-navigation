@@ -68,13 +68,13 @@ class ExitManager(
 
     private var lastTime: Long? = null
 
-    fun exitIfNeed(finishAction: () -> Unit): Unit? {
+    fun exitIfNeed(exitAction: () -> Unit): Unit? {
         val currentTime = System.currentTimeMillis()
         return if (currentTime - (lastTime ?: 0L) > delay) {
             lastTime = currentTime
             null
         } else {
-            finishAction()
+            exitAction()
         }
     }
 }
