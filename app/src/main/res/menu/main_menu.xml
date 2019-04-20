@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/itemAssembly"
+        android:icon="@drawable/ic_android_black_24dp"
+        android:title="test" />
+
+    <item
+        android:id="@+id/itemHistory"
+        android:icon="@drawable/ic_android_black_24dp"
+        android:title="test" />
+
+    <item
+        android:id="@+id/itemDisassembly"
+        android:icon="@drawable/ic_android_black_24dp"
+        android:title="test" />
+
+    <item
+        android:id="@+id/itemCabinet"
+        android:icon="@drawable/ic_android_black_24dp"
+        android:title="test" />
+
+</menu>
