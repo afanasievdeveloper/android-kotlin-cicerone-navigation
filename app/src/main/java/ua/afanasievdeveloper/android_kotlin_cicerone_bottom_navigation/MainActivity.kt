@@ -66,11 +66,11 @@ class ExitManager(
     private val delay: Long = Toast.LENGTH_SHORT.toLong()
 ) {
 
-    private var lastTime: Long? = null
+    private var lastTime: Long = 0
 
     fun exitIfNeed(exitAction: () -> Unit): Unit? {
         val currentTime = System.currentTimeMillis()
-        return if (currentTime - (lastTime ?: 0L) > delay) {
+        return if (currentTime - lastTime > delay) {
             lastTime = currentTime
             null
         } else {
