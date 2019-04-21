@@ -1,29 +1,27 @@
-package ua.afanasievdeveloper.android_kotlin_cicerone_bottom_navigation
+package ua.afanasievdeveloper.android_kotlin_cicerone_bottom_navigation.navigation
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import ru.terrakok.cicerone.Cicerone
-import ru.terrakok.cicerone.Navigator
 import ru.terrakok.cicerone.NavigatorHolder
 import ru.terrakok.cicerone.Router
 import ru.terrakok.cicerone.android.support.SupportAppNavigator
-import ua.afanasievdeveloper.android_kotlin_cicerone_bottom_navigation.navigation.LocalItem
-import ua.afanasievdeveloper.android_kotlin_cicerone_bottom_navigation.navigation.NavigationFactory
+import ua.afanasievdeveloper.android_kotlin_cicerone_bottom_navigation.R
+import ua.afanasievdeveloper.android_kotlin_cicerone_bottom_navigation.utils.require
+import ua.afanasievdeveloper.android_kotlin_cicerone_bottom_navigation.utils.withArguments
 
 /**
- * Replase.
- *
  * @author A. Afanasiev (https://github.com/afanasievdeveloper)
  */
-
-val navigationFactory = NavigationFactory(routerSupplier = { Cicerone.create() })
-
 class ContainerFragment : Fragment(), RouterProvider {
 
-    private lateinit var containerType: LocalItem
+    // Inject
+    private val containerFactory: ContainerFactory = factory
+
+    private lateinit var containerType: ContainerType
+
     private lateinit var localRouter: Router
     private lateinit var localNavigatorHolder: NavigatorHolder
     private val localNavigator by lazy(LazyThreadSafetyMode.NONE) {
@@ -40,12 +38,13 @@ class ContainerFragment : Fragment(), RouterProvider {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val containerName = (savedInstanceState ?: arguments).require<String>(KEY)
-        containerType = LocalItem.valueOf(containerName)
 
-        val cicerone = navigationFactory.getContainer(containerType.name)
-        localRouter = cicerone.router
-        localNavigatorHolder = cicerone.navigatorHolder
+        val containerName = (savedInstanceState ?: arguments).require<String>(KEY)
+        containerType = ContainerType.valueOf(containerName)
+
+        val container = containerFactory.getContainer(containerType.name)
+        localRouter = container.router
+        localNavigatorHolder = container.navigatorHolder
     }
 
     override fun onResume() {
@@ -69,34 +68,21 @@ class ContainerFragment : Fragment(), RouterProvider {
             ?: localRouter.replaceScreen(containerType.defaultScreen())
     }
 
-    private fun LocalItem.defaultScreen(): Screen {
-        val n = when (this) {
-            LocalItem.ASSEMBLY -> "1"
-            LocalItem.HISTORY -> "2"
-            LocalItem.DISASSEMBLY -> "3"
-            LocalItem.CABINET -> "4"
+    private fun ContainerType.defaultScreen(): Screen {
+        val name = when (this) {
+            ContainerType.FIRST -> "1"
+            ContainerType.SECOND -> "2"
+            ContainerType.THIRD -> "3"
+            ContainerType.FOURTH -> "4"
         }
-        return Screen.Test("$n ")
+        return Screen.Local("Local $name + ")
     }
-
 
     companion object {
         private const val KEY = ".bundle.test.key"
 
         fun newInstance(name: String): ContainerFragment {
-            return ContainerFragment().apply {
-                arguments = Bundle().apply {
-                    putString(KEY, name)
-                }
-            }
+            return ContainerFragment().withArguments { putString(KEY, name) }
         }
-    }
-}
-
-@Suppress("UNCHECKED_CAST")
-fun <T> Bundle?.require(key: String): T {
-    requireNotNull(value = this).apply {
-        check(value = containsKey(key), lazyMessage = { "Value with key $key not found." })
-        return get(key) as T
     }
 }

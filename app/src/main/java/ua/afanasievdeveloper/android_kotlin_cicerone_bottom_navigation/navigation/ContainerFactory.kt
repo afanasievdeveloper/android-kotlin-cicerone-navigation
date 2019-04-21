@@ -4,17 +4,15 @@ import ru.terrakok.cicerone.Cicerone
 import ru.terrakok.cicerone.Router
 
 /**
- * Replase.
- *
  * @author A. Afanasiev (https://github.com/afanasievdeveloper)
  */
-class NavigationFactory(
-    private val routerSupplier: () -> Cicerone<Router>,
+class ContainerFactory(
+    private val containerSupplier: () -> Cicerone<Router>,
     private val containers: HashMap<String, Cicerone<Router>> = hashMapOf()
 ) {
-
     @Synchronized
-    fun getContainer(name: String): Cicerone<Router> {
-        return containers.getOrPut(name, routerSupplier)
-    }
+    fun getContainer(name: String): Cicerone<Router> = containers.getOrPut(name, containerSupplier)
 }
+
+// Must be singleton
+val factory = ContainerFactory(containerSupplier = { Cicerone.create() })

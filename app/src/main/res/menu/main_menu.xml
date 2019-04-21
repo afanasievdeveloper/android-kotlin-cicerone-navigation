@@ -2,22 +2,22 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/itemAssembly"
+        android:id="@+id/itemFirst"
         android:icon="@drawable/ic_android_black_24dp"
         android:title="test" />
 
     <item
-        android:id="@+id/itemHistory"
+        android:id="@+id/itemSecond"
         android:icon="@drawable/ic_android_black_24dp"
         android:title="test" />
 
     <item
-        android:id="@+id/itemDisassembly"
+        android:id="@+id/itemThird"
         android:icon="@drawable/ic_android_black_24dp"
         android:title="test" />
 
     <item
-        android:id="@+id/itemCabinet"
+        android:id="@+id/itemFourth"
         android:icon="@drawable/ic_android_black_24dp"
         android:title="test" />
 

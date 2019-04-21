@@ -2,43 +2,43 @@ package ua.afanasievdeveloper.android_kotlin_cicerone_bottom_navigation
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.Toast
-import androidx.fragment.app.Fragment
 import ru.terrakok.cicerone.Cicerone
 import ru.terrakok.cicerone.Router
 import ru.terrakok.cicerone.android.support.SupportAppNavigator
-import ru.terrakok.cicerone.android.support.SupportAppScreen
+import ua.afanasievdeveloper.android_kotlin_cicerone_bottom_navigation.navigation.RouterProvider
+import ua.afanasievdeveloper.android_kotlin_cicerone_bottom_navigation.navigation.Screen
+import ua.afanasievdeveloper.android_kotlin_cicerone_bottom_navigation.utils.ExitManager
+import ua.afanasievdeveloper.android_kotlin_cicerone_bottom_navigation.utils.toast
 
-interface RouterProvider {
-    val router: Router
-}
-
+/**
+ * @author A. Afanasiev (https://github.com/afanasievdeveloper)
+ */
 class MainActivity : AppCompatActivity(), RouterProvider {
 
     private val exitManager = ExitManager()
 
-    private val cicerone = Cicerone.create()
+    private val navigation = Cicerone.create()
     private val navigator by lazy(LazyThreadSafetyMode.NONE) {
         SupportAppNavigator(this, supportFragmentManager, R.id.mainFragmentContainer)
     }
 
     override val router: Router
-        get() = cicerone.router
+        get() = navigation.router
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        router.newRootScreen(Screen.Authorization())
+        router.newRootScreen(Screen.Splash())
     }
 
     override fun onResume() {
         super.onResume()
-        cicerone.navigatorHolder.setNavigator(navigator)
+        navigation.navigatorHolder.setNavigator(navigator)
     }
 
     override fun onPause() {
         super.onPause()
-        cicerone.navigatorHolder.setNavigator(null)
+        navigation.navigatorHolder.setNavigator(null)
     }
 
     override fun onBackPressed() {
@@ -58,43 +58,6 @@ class MainActivity : AppCompatActivity(), RouterProvider {
     }
 
     private fun exitIfNeed(manager: ExitManager = exitManager, screenRouter: Router = router) {
-        manager.exitIfNeed { screenRouter.exit() } ?: toast("Нажмите еще раз для выхода")
+        manager.exitIfNeed { screenRouter.exit() } ?: toast("Press again to exit")
     }
-}
-
-class ExitManager(
-    private val delay: Long = Toast.LENGTH_SHORT.toLong()
-) {
-
-    private var lastTime: Long = 0
-
-    fun exitIfNeed(exitAction: () -> Unit): Unit? {
-        val currentTime = System.currentTimeMillis()
-        return if (currentTime - lastTime > delay) {
-            lastTime = currentTime
-            null
-        } else {
-            exitAction()
-        }
-    }
-}
-
-sealed class Screen : SupportAppScreen() {
-
-    override fun getScreenKey(): String = this::class.java.simpleName
-
-    override fun getFragment(): Fragment = when (this) {
-        is Main -> MainFragment.newInstance()
-        is Authorization -> AuthorizationFragment.newInstance()
-        is Test -> TestFragment.newInstance(name)
-        is Simple -> SimpleFragment.newInstance(name)
-    }
-
-    class Main : Screen()
-
-    class Authorization : Screen()
-
-    data class Test(val name: String) : Screen()
-
-    data class Simple(val name: String) : Screen()
 }

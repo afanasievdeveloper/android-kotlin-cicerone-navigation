@@ -14,19 +14,19 @@
         tools:text="+" />
 
     <Button
-        android:id="@+id/next"
+        android:id="@+id/nextLocalButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|center"
         android:layout_marginBottom="200dp"
-        android:text="NEXT" />
+        android:text="NEXT LOCAL SCREEN" />
 
     <Button
-        android:id="@+id/global"
+        android:id="@+id/nextGlobalButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|center"
         android:layout_marginBottom="120dp"
-        android:text="GLOBAL" />
+        android:text="NEXT GLOBAL SCREEN" />
 
 </FrameLayout>

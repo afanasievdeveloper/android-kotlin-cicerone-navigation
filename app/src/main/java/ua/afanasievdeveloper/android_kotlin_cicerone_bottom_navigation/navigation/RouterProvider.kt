@@ -1,9 +1,10 @@
 package ua.afanasievdeveloper.android_kotlin_cicerone_bottom_navigation.navigation
 
+import ru.terrakok.cicerone.Router
+
 /**
- * Replase.
- *
  * @author A. Afanasiev (https://github.com/afanasievdeveloper)
  */
-
-enum class LocalItem { ASSEMBLY, HISTORY, DISASSEMBLY, CABINET }
+interface RouterProvider {
+    val router: Router
+}
